@@ -21,13 +21,13 @@ const Blog = ({ blog,handleLikes,handleRemove }) => {
   return (
     <li className='blog'>
       <div style={blogStyle}>
-        <div>
+        <div data-testid='blogView'>
           {blog.title} {blog.author}
         </div>
         <div style={hideWhenVisible}>
-          <button onClick={toggleVisibility} className='viewButton'>view</button>
+          <button onClick={toggleVisibility} id='viewButton'>view</button>
         </div>
-        <div style={showWhenVisible} className='blogContent'>
+        <div style={showWhenVisible} data-testid='blogContent'>
           <p>{blog.url}</p>
           <p>Likes: {blog.likes}</p>
           <button onClick={() => handleLikes(blog)}>like</button>

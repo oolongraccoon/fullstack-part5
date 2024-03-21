@@ -121,7 +121,7 @@ const App = () => {
         <p>{user.name} logged in</p>
         <div><LogoutButton /></div>
       </div>}
-      <Togglable buttonLabel="creat new blog">
+      <Togglable buttonLabel="create new blog">
         <CreateForm createBlog={addBlog} />
       </Togglable>
 

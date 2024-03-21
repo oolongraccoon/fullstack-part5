@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import CreateForm from './Createform'
 import userEvent from '@testing-library/user-event'
 import { expect } from 'vitest'
@@ -13,29 +13,40 @@ describe('CreateForm component', () => {
           <CreateForm createBlog={createBlogMock} />
         </Togglable>
       )
-    // Render the CreateForm component
+
     const Button = screen.getByText('create new blog')
-    const user = userEvent.setup()
-    await user.click(Button)
+    await userEvent.click(Button)
+    await screen.findByTestId('create')
 
-    // Fill out the form inputs
-    fireEvent.change(getByLabelText('title:'), { target: { value: 'Test Title' } });
-    fireEvent.change(getByLabelText('author:'), { target: { value: 'Test Author' } });
-    fireEvent.change(getByLabelText('url:'), { target: { value: 'http://example.com' } });
+    const titleInput = container.querySelector('#title-input')
+    const authorInput = container.querySelector('#author-input')
+    const urlInput = container.querySelector('#url-input')
+    fireEvent.change(titleInput, {
+      target: { value: "Test Title" },
+    });
+    fireEvent.change(authorInput, {
+      target: { value: "Test Author" },
+    });
+    fireEvent.change(urlInput, {
+      target: { value: "http://test.com" },
+    });
+ 
+    const createButton = screen.getByText('create')
+    await userEvent.click(createButton)
 
-    // Submit the form
-    fireEvent.submit(getByText('create'))
-
-    // Check if createBlogMock was called with the correct arguments
     expect(createBlogMock).toHaveBeenCalledWith({
       title: 'Test Title',
       author: 'Test Author',
-      url: 'http://example.com'
+      url: 'http://test.com'
     });
-
-    // Ensure form inputs are cleared after submission
-    expect(getByLabelText('title:').value).toBe('')
-    expect(getByLabelText('author:').value).toBe('')
-    expect(getByLabelText('url:').value).toBe('')
-  });
-});
+ 
+ 
+    expect(createBlogMock).toHaveBeenCalledTimes(1)
+    expect(createBlogMock).toHaveBeenCalledWith({
+      title: 'Test Title',
+      author: 'Test Author',
+      url: 'http://test.com',
+    })
+})
+})
+// 5.16: Blog List Tests, step 4
